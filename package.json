@@ -1,0 +1,24 @@
+{
+  "name": "mikroapps",
+  "version": "0.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "private": true,
+  "workspaces": [
+    "./gcrm",
+    "./ghr",
+    "./gcode"
+  ],
+  "packages": {},
+  "author": {
+    "name": "Francesco Benedetto",
+    "url": "https://github.com/nebarf"
+  },
+  "devDependencies": {
+    "concurrently": "7.6.0",
+    "wait-on": "7.0.1"
+  },
+  "scripts": {
+    "start": "concurrently \"npm --prefix ./gcrm start\" \"npm --prefix ./ghr start\" \"npm --prefix ./gcode start\""
+  }
+}
