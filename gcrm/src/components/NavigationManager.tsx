@@ -13,6 +13,7 @@ export function NavigationManager({ children }: NavigationManagerProps) {
   useEffect(() => {
     function shellNavigationHandler(event: Event) {
       const pathname = (event as CustomEvent<string>).detail;
+
       if (
         location.pathname === pathname ||
         !matchRoutes(routes, { pathname })

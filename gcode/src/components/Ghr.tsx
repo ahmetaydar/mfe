@@ -3,7 +3,8 @@ import { mount } from 'ghr/GhrIndex';
 import { ghrRoutingPrefix } from '../routing/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const GhrBasename = `/${ghrRoutingPrefix}`;
+const path = localStorage.getItem('companyName');
+const GhrBasename = `/${path}/${ghrRoutingPrefix}`;
 
 export default () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -15,7 +16,7 @@ export default () => {
     const GhrNavigationEventHandler = (event: Event) => {
       const pathname = (event as CustomEvent<string>).detail;
       const newPathname = `${GhrBasename}${pathname}`;
-      if (newPathname === location.pathname) {
+      if (newPathname === location.pathname + '/') {
         return;
       }
       navigate(newPathname);

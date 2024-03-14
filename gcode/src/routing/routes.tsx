@@ -1,7 +1,11 @@
 import React, { lazy, Suspense } from 'react';
-import { Navigate, RouteObject } from 'react-router-dom';
-import { Layout } from '../components/Layout';
+import { Navigate, RouteObject, useParams } from 'react-router-dom';
+
 import { gcrmRoutingPrefix, ghrRoutingPrefix } from './constants';
+import Landing from '../components/Landing';
+import Login from '../components/Login';
+import Dashboard from '../components/Dashboard';
+const path = localStorage.getItem('companyName');
 
 const GcrmLazy = lazy(() => import('../components/Gcrm'));
 const GhrLazy = lazy(() => import('../components/Ghr'));
@@ -9,28 +13,30 @@ const GhrLazy = lazy(() => import('../components/Ghr'));
 export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to={`/${gcrmRoutingPrefix}`} />,
-      },
-      {
-        path: `/${gcrmRoutingPrefix}/*`,
-        element: (
-          <Suspense fallback="Loading Gcrm...">
-            <GcrmLazy />
-          </Suspense>
-        ),
-      },
-      {
-        path: `/${ghrRoutingPrefix}/*`,
-        element: (
-          <Suspense fallback="Loading Ghr...">
-            <GhrLazy />
-          </Suspense>
-        ),
-      },
-    ],
+    element: <Landing />,
+  },
+  {
+    path: '/:companyName/login',
+    element: <Login />,
+  },
+  {
+    path: '/:companyName/dashboard',
+    element: <Dashboard />,
+  },
+  {
+    path: `/${path}/${gcrmRoutingPrefix}/*`,
+    element: (
+      <Suspense fallback="Loading Gcrm...">
+        <GcrmLazy />
+      </Suspense>
+    ),
+  },
+  {
+    path: `/${path}/${ghrRoutingPrefix}/*`,
+    element: (
+      <Suspense fallback="Loading Ghr...">
+        <GhrLazy />
+      </Suspense>
+    ),
   },
 ];
