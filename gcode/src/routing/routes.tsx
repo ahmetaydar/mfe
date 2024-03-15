@@ -5,6 +5,7 @@ import { gcrmRoutingPrefix, ghrRoutingPrefix } from './constants';
 import Landing from '../components/Landing';
 import Login from '../components/Login';
 import Dashboard from '../components/Dashboard';
+import CommonLayout from '../components/CommonLayout';
 const path = localStorage.getItem('companyName');
 
 const GcrmLazy = lazy(() => import('../components/Gcrm'));
@@ -21,7 +22,11 @@ export const routes: RouteObject[] = [
   },
   {
     path: '/:companyName/dashboard',
-    element: <Dashboard />,
+    element: (
+      <CommonLayout>
+        <Dashboard />
+      </CommonLayout>
+    ),
   },
   {
     path: '/:companyName', // Yeni eklenen yol örneği

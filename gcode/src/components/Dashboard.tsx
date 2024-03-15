@@ -4,10 +4,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 const Dashboard = () => {
   const navigate = useNavigate();
   const path = localStorage.getItem('companyName');
-  const location = useLocation();
-  const params = useParams();
-  console.log(location);
-  console.log(params);
 
   const redirectToGcrm = () => {
     navigate(`/${path}/gcrm`, { replace: true });
