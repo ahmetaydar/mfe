@@ -24,6 +24,10 @@ export const routes: RouteObject[] = [
     element: <Dashboard />,
   },
   {
+    path: '/:companyName', // Yeni eklenen yol örneği
+    element: <Navigate to={`/${path}/dashboard`} />, // Yeni eklenen Navigate bileşeni
+  },
+  {
     path: `/${path}/${gcrmRoutingPrefix}/*`,
     element: (
       <Suspense fallback="Loading Gcrm...">
@@ -38,5 +42,9 @@ export const routes: RouteObject[] = [
         <GhrLazy />
       </Suspense>
     ),
+  },
+  {
+    path: '*',
+    element: <Navigate to="/" />,
   },
 ];

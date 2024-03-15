@@ -8,7 +8,7 @@ const Login = () => {
 
   const hanleLogin = () => {
     localStorage.setItem('companyName', params.companyName);
-    navigate(`/${path}/dashboard`);
+    navigate(`/${params.companyName}/dashboard`);
   };
   return (
     <>
