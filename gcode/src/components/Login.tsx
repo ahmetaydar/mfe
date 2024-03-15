@@ -9,9 +9,11 @@ const Login = () => {
 
   const hanleLogin = () => {
     localStorage.setItem('companyName', params.companyName);
-    Cookies.set('token', '111112121');
+    Cookies.set('token', 'eyJhbGciOiJIUzI1NiIsI');
+
     navigate(`/${params.companyName}/dashboard`);
   };
+
   return (
     <>
       <div>GCODE LOGIN PAGE</div>;
