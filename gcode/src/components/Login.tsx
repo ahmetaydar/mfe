@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const params = useParams();
@@ -8,6 +9,7 @@ const Login = () => {
 
   const hanleLogin = () => {
     localStorage.setItem('companyName', params.companyName);
+    Cookies.set('token', '111112121');
     navigate(`/${params.companyName}/dashboard`);
   };
   return (

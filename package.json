@@ -20,5 +20,9 @@
   },
   "scripts": {
     "start": "concurrently \"npm --prefix ./gcrm start\" \"npm --prefix ./ghr start\" \"npm --prefix ./gcode start\""
+  },
+  "dependencies": {
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0"
   }
 }
