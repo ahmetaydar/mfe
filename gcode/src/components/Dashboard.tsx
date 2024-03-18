@@ -1,12 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useStore } from 'store/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from 'store/store';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const path = localStorage.getItem('companyName');
-  const { count, increment } = useStore();
+  const count = useSelector((state: any) => state.counter.value);
+  const dispatch = useDispatch();
 
   const redirectToGcrm = () => {
     navigate(`/${path}/gcrm`, { replace: true });
@@ -33,15 +35,20 @@ const Dashboard = () => {
           GHR
         </div>
       </div>
-      <div className="text-3xl mx-auto max-w-6xl">
-        <div>Name: host</div>
-        <div>Count: {count}</div>
+      <div>
         <div>
           <button
-            onClick={increment}
-            className="bg-indigo-800 text-white font-bold py-2 px-4 rounded"
+            aria-label="Increment value"
+            onClick={() => dispatch(increment())}
           >
-            Add To Cart
+            Increment
+          </button>
+          <span>{count}</span>
+          <button
+            aria-label="Decrement value"
+            onClick={() => dispatch(decrement())}
+          >
+            Decrement
           </button>
         </div>
       </div>

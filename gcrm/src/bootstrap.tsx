@@ -4,7 +4,8 @@ import { RouterProvider } from 'react-router-dom';
 import { createRouter } from './routing/router-factory';
 import { RoutingStrategy } from './routing/types';
 import './index.css';
-import { StoreProvider } from 'store/store';
+import { store } from 'store/store';
+import { Provider } from 'react-redux';
 
 const mount = ({
   mountPoint,
@@ -18,9 +19,9 @@ const mount = ({
   const router = createRouter({ strategy: routingStrategy, initialPathname });
   const root = createRoot(mountPoint);
   root.render(
-    <StoreProvider>
+    <Provider store={store}>
       <RouterProvider router={router} />
-    </StoreProvider>
+    </Provider>
   );
 
   return () => queueMicrotask(() => root.unmount());

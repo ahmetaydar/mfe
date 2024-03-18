@@ -1,29 +1,35 @@
 import Cookies from 'js-cookie';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useStore } from 'store/store';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from 'store/store';
 
 export function Page1() {
-  const { count, clear } = useStore();
+  const count = useSelector((state: any) => state.counter.value);
+  const dispatch = useDispatch();
   return (
     <React.Fragment>
       <div>Page 1 from GHR</div>
       <Link to="/page-2">Go to Page 2</Link>
       <h6>token : {Cookies.get('token')}</h6>
       <br />
-      <header className="bg-blue-700 text-white font-bold text-3xl p-5 flex">
-        <div className="flex-grow">Awesome Header</div>
+      <div>
         <div>
-          {count}
-
           <button
-            onClick={clear}
-            className="bg-indigo-800 text-white font-bold py-2 px-4 rounded"
+            aria-label="Increment value"
+            onClick={() => dispatch(increment())}
           >
-            Clear Cart
+            Increment
+          </button>
+          <span>{count}</span>
+          <button
+            aria-label="Decrement value"
+            onClick={() => dispatch(decrement())}
+          >
+            Decrement
           </button>
         </div>
-      </header>
+      </div>
     </React.Fragment>
   );
 }
