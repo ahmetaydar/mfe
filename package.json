@@ -19,7 +19,7 @@
     "wait-on": "7.0.1"
   },
   "scripts": {
-    "start": "concurrently \"npm --prefix ./gcrm start\" \"npm --prefix ./ghr start\" \"npm --prefix ./gcode start\""
+    "start": "concurrently \"npm --prefix ./store start\" \"npm --prefix ./gcrm start\" \"npm --prefix ./ghr start\" \"npm --prefix ./gcode start\""
   },
   "dependencies": {
     "js-cookie": "^3.0.5",

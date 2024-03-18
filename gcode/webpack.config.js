@@ -49,6 +49,7 @@ module.exports = (_, argv) => ({
       remotes: {
         gcrm: 'gcrm@http://localhost:3001/remoteEntry.js',
         ghr: 'ghr@http://localhost:3002/remoteEntry.js',
+        store: 'store@http://localhost:3100/remoteEntry.js',
       },
       exposes: {},
       shared: {

@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { useStore } from 'store/store';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const path = localStorage.getItem('companyName');
+  const { count, increment } = useStore();
 
   const redirectToGcrm = () => {
     navigate(`/${path}/gcrm`, { replace: true });
@@ -29,6 +31,18 @@ const Dashboard = () => {
           onClick={redirectToGhr}
         >
           GHR
+        </div>
+      </div>
+      <div className="text-3xl mx-auto max-w-6xl">
+        <div>Name: host</div>
+        <div>Count: {count}</div>
+        <div>
+          <button
+            onClick={increment}
+            className="bg-indigo-800 text-white font-bold py-2 px-4 rounded"
+          >
+            Add To Cart
+          </button>
         </div>
       </div>
     </main>

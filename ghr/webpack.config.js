@@ -46,7 +46,9 @@ module.exports = (_, argv) => ({
     new ModuleFederationPlugin({
       name: 'ghr',
       filename: 'remoteEntry.js',
-      remotes: {},
+      remotes: {
+        store: 'store@http://localhost:3100/remoteEntry.js',
+      },
       exposes: {
         './GhrIndex': './src/bootstrap',
       },

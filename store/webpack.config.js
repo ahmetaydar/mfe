@@ -2,10 +2,9 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const Dotenv = require('dotenv-webpack');
 const deps = require('./package.json').dependencies;
-const devDeps = require('./package.json').devDependencies;
 module.exports = (_, argv) => ({
   output: {
-    publicPath: 'http://localhost:3001/',
+    publicPath: 'http://localhost:3100/',
   },
 
   resolve: {
@@ -13,11 +12,8 @@ module.exports = (_, argv) => ({
   },
 
   devServer: {
-    port: 3001,
+    port: 3100,
     historyApiFallback: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
   },
 
   module: {
@@ -45,17 +41,14 @@ module.exports = (_, argv) => ({
 
   plugins: [
     new ModuleFederationPlugin({
-      name: 'gcrm',
+      name: 'store',
       filename: 'remoteEntry.js',
-      remotes: {
-        store: 'store@http://localhost:3100/remoteEntry.js',
-      },
+      remotes: {},
       exposes: {
-        './GcrmIndex': './src/bootstrap',
+        './store': './src/store',
       },
       shared: {
         ...deps,
-        ...devDeps,
         react: {
           singleton: true,
           requiredVersion: deps.react,
