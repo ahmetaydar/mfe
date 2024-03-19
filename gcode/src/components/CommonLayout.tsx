@@ -11,9 +11,9 @@ const CommonLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     navigate('/');
   };
   return (
-    <div className="flex flex-col w-full ">
+    <div className="flex flex-col w-full  ">
       <Header />
-      <div className="w-full bg-blue-300 h-screen">{children}</div>
+      <div className="w-full bg-blue-300 ">{children}</div>
     </div>
   );
 };
