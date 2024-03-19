@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const hanleLogin = () => {
-    // localStorage.setItem('companyName', params.companyName);
+    localStorage.setItem('companyName', params.companyName);
     // Cookies.set('token', 'eyJhbGciOiJIUzI1NiIsI');
 
     navigate(`/${params.companyName}/dashboard`);

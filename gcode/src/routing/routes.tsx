@@ -6,6 +6,7 @@ import Landing from '../components/Landing';
 import Login from '../components/Login';
 import Dashboard from '../components/Dashboard';
 import CommonLayout from '../components/CommonLayout';
+import Header from '../components/Header';
 const path = localStorage.getItem('companyName');
 
 const GcrmLazy = lazy(() => import('../components/Gcrm'));
@@ -36,6 +37,7 @@ export const routes: RouteObject[] = [
     path: `/${path}/${gcrmRoutingPrefix}/*`,
     element: (
       <Suspense fallback="Loading Gcrm...">
+        <Header />
         <GcrmLazy />
       </Suspense>
     ),
@@ -44,6 +46,7 @@ export const routes: RouteObject[] = [
     path: `/${path}/${ghrRoutingPrefix}/*`,
     element: (
       <Suspense fallback="Loading Ghr...">
+        <Header />
         <GhrLazy />
       </Suspense>
     ),

@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 // CommonLayout bileşeni
 const CommonLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -10,14 +11,9 @@ const CommonLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     navigate('/');
   };
   return (
-    <div className="flex flex-row w-full ">
-      <div className="w-1/6">
-        <div>ANA SIDEBAR</div>
-        <button className="block p-2" onClick={() => handleLogout()}>
-          ÇIKIŞ YAP
-        </button>
-      </div>
-      <div className="w-5/6 bg-blue-300 h-screen">{children}</div>
+    <div className="flex flex-col w-full ">
+      <Header />
+      <div className="w-full bg-blue-300 h-screen">{children}</div>
     </div>
   );
 };
