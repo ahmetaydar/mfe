@@ -1,16 +1,36 @@
 import React, { lazy, Suspense } from 'react';
-import { Navigate, RouteObject, useParams } from 'react-router-dom';
-
+import { Navigate, RouteObject, useLocation } from 'react-router-dom';
 import { gcrmRoutingPrefix, ghrRoutingPrefix } from './constants';
 import Landing from '../components/Landing';
 import Login from '../components/Login';
 import Dashboard from '../components/Dashboard';
 import CommonLayout from '../components/CommonLayout';
 import Header from '../components/Header';
-const path = localStorage.getItem('companyName');
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
+const path = localStorage.getItem('companyName');
 const GcrmLazy = lazy(() => import('../components/Gcrm'));
 const GhrLazy = lazy(() => import('../components/Ghr'));
+
+const RequireAuth = ({ element }: { element: React.ReactNode }) => {
+  const location = useLocation();
+  const accessToken = Cookies.get('accessToken');
+  console.log('accessToken', accessToken);
+
+  if (accessToken === undefined) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  // const decoded = jwtDecode(accessToken !== undefined ? accessToken : '');
+  // console.log(decoded);
+
+  return accessToken ? (
+    element
+  ) : (
+    <Navigate to="/" state={{ from: location }} replace />
+  );
+};
 
 export const routes: RouteObject[] = [
   {
@@ -24,31 +44,43 @@ export const routes: RouteObject[] = [
   {
     path: '/:companyName/dashboard',
     element: (
-      <CommonLayout>
-        <Dashboard />
-      </CommonLayout>
+      <RequireAuth
+        element={
+          <CommonLayout>
+            <Dashboard />
+          </CommonLayout>
+        }
+      />
     ),
   },
   {
     path: '/:companyName', // Yeni eklenen yol örneği
-    element: <Navigate to={`/${path}/dashboard`} />, // Yeni eklenen Navigate bileşeni
+    element: <Navigate to={`/${path}/login`} />, // Yeni eklenen Navigate bileşeni
   },
   {
     path: `/${path}/${gcrmRoutingPrefix}/*`,
     element: (
-      <Suspense fallback="Loading Gcrm...">
-        <Header />
-        <GcrmLazy />
-      </Suspense>
+      <RequireAuth
+        element={
+          <Suspense fallback="Loading Gcrm...">
+            <Header />
+            <GcrmLazy />
+          </Suspense>
+        }
+      />
     ),
   },
   {
     path: `/${path}/${ghrRoutingPrefix}/*`,
     element: (
-      <Suspense fallback="Loading Ghr...">
-        <Header />
-        <GhrLazy />
-      </Suspense>
+      <RequireAuth
+        element={
+          <Suspense fallback="Loading Ghr...">
+            <Header />
+            <GhrLazy />
+          </Suspense>
+        }
+      />
     ),
   },
   {
