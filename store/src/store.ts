@@ -1,88 +1,112 @@
-// import React from 'react';
-// import { configureStore, createSlice } from '@reduxjs/toolkit';
-// import { Provider, useSelector, useDispatch } from 'react-redux';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import {
+  createApi,
+  fetchBaseQuery,
+  BaseQueryFn,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/query/react';
 
-// export const counterSlice = createSlice({
-//   name: 'counter',
-//   initialState: {
-//     count: 0,
-//   },
-//   reducers: {
-//     increment: (state) => {
-//       state.count += 1;
-//     },
-//     clear: (state) => {
-//       state.count = 0;
-//     },
-//   },
-// });
-
-// const { increment, clear } = counterSlice.actions;
-
-// const store = configureStore({
-//   reducer: {
-//     counter: counterSlice.reducer,
-//   },
-// });
-
-// export function useStore() {
-//   const count = useSelector((state) => state.counter.count);
-//   const dispatch = useDispatch();
-//   return {
-//     count,
-//     increment: () => dispatch(increment()),
-//     clear: () => dispatch(clear()),
-//   };
-// }
-
-// export function StoreProvider({ children }) {
-//   return <Provider store={store}>{children}</Provider>;
-// }
-
-import { configureStore } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-
-export interface CounterState {
-  value: number;
+interface AuthState {
+  token: string | null;
+  user: string | null;
 }
 
-const initialState: CounterState = {
-  value: 0,
-};
-
-export const counterSlice = createSlice({
-  name: 'counter',
-  initialState,
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: { accessToken: null, refreshToken: null },
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
+    setCredentials: (state, action) => {
+      const { accessToken, refreshToken } = action.payload;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
     },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
+    logOut: (state) => {
+      state.accessToken = null;
+      state.refreshToken = null;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { setCredentials, logOut } = authSlice.actions;
 
-export default counterSlice.reducer;
+export default authSlice.reducer;
+
+export const selectCurrentAccessToken = (state: any) => state.auth.accessToken;
+export const selectCurrentRefreshToken = (state: any) =>
+  state.auth.refreshToken;
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: 'http://10.0.0.96:83',
+  credentials: 'include',
+  prepareHeaders: (headers, { getState }) => {
+    const state = getState() as { auth: AuthState };
+    const token = state.auth.token;
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
+
+const baseQueryWithReauth: BaseQueryFn<
+  any,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result?.error?.status === 401) {
+    console.log('sending refresh token');
+    // send refresh token to get new access token
+    const refreshResult = await baseQuery(
+      '/api/auth/refreshtokenlogin',
+      api,
+      extraOptions
+    );
+    console.log(refreshResult);
+    if (refreshResult?.data) {
+      // Type assertion for api.getState() to specify the type
+      const state = api.getState() as { auth: { user: string } };
+      const user = state.auth.user;
+      // store the new token
+      api.dispatch(setCredentials({ ...refreshResult, user }));
+      // retry the original query with new access token
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logOut());
+    }
+  }
+
+  return result;
+};
+
+export const apiSlice = createApi({
+  baseQuery: baseQueryWithReauth,
+  endpoints: (builder) => ({}),
+});
 
 export const store = configureStore({
   reducer: {
-    counter: counterSlice.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
+    auth: authSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
+  devTools: true,
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+export const authApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) => ({
+    login: builder.mutation({
+      query: (credentials) => ({
+        url: '/api/auth/login',
+        method: 'POST',
+        body: { ...credentials },
+      }),
+    }),
+  }),
+});
+
+export const { useLoginMutation } = authApiSlice;
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

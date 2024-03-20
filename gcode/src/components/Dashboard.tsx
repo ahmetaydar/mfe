@@ -1,15 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { useSelector, useDispatch } from 'react-redux';
-import { increment, decrement } from 'store/store';
+import { useSelector } from 'react-redux';
+import {
+  selectCurrentAccessToken,
+  selectCurrentRefreshToken,
+} from 'store/store';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const path = localStorage.getItem('companyName');
-  const count = useSelector((state: any) => state.counter.value);
-  const dispatch = useDispatch();
-
+  const token = useSelector(selectCurrentAccessToken);
+  const refreshToken = useSelector(selectCurrentRefreshToken);
+  console.log('gcode token', token);
+  console.log('gcode refreshToken', refreshToken);
   const redirectToGcrm = () => {
     navigate(`/${path}/gcrm`, { replace: true });
   };
@@ -33,24 +36,6 @@ const Dashboard = () => {
           onClick={redirectToGhr}
         >
           GHR
-        </div>
-        <h6>token :{Cookies.get('token')}</h6>
-      </div>
-      <div>
-        <div>
-          <button
-            aria-label="Increment value"
-            onClick={() => dispatch(increment())}
-          >
-            Increment
-          </button>
-          <span>{count}</span>
-          <button
-            aria-label="Decrement value"
-            onClick={() => dispatch(decrement())}
-          >
-            Decrement
-          </button>
         </div>
       </div>
     </main>
