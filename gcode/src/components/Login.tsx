@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLoginMutation, setCredentials } from 'store/store';
 import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const params = useParams();
@@ -23,6 +24,8 @@ const Login = () => {
         console.log(res.data.token);
         dispatch(setCredentials(res.data.token));
         localStorage.setItem('companyName', params.companyName);
+        Cookies.set('accessToken', res.data.token.accessToken);
+        Cookies.set('refreshToken', res.data.token.refreshToken);
         navigate(`/${params.companyName}/dashboard`);
       } else {
         console.error('Error occurred during login:', res.error);

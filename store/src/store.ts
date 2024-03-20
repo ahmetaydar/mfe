@@ -82,7 +82,7 @@ const baseQueryWithReauth: BaseQueryFn<
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
-  endpoints: (builder) => ({}),
+  endpoints: () => ({}),
 });
 
 export const store = configureStore({
