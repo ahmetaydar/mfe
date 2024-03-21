@@ -13,7 +13,7 @@ const Landing = () => {
 
   return (
     <>
-      <div>Hoşgeldiniz </div>
+      <div className="font-semibold">Hoşgeldiniz </div>
 
       <button
         className="bg-green-400 text-white border rounded-md"

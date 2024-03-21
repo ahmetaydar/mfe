@@ -7,7 +7,7 @@ import Dashboard from '../components/Dashboard';
 import CommonLayout from '../components/CommonLayout';
 import Header from '../components/Header';
 import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
+// import { jwtDecode } from 'jwt-decode';
 
 const path = localStorage.getItem('companyName');
 const GcrmLazy = lazy(() => import('../components/Gcrm'));
@@ -55,7 +55,7 @@ export const routes: RouteObject[] = [
   },
   {
     path: '/:companyName', // Yeni eklenen yol örneği
-    element: <Navigate to={`/${path}/login`} />, // Yeni eklenen Navigate bileşeni
+    element: path ? <Navigate to={`/${path}/login`} /> : <Navigate to="/" />, // Yeni eklenen Navigate bileşeni
   },
   {
     path: `/${path}/${gcrmRoutingPrefix}/*`,

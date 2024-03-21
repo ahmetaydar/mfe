@@ -5,6 +5,9 @@ import {
   BaseQueryFn,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
+import Cookies from 'js-cookie';
+
+const routeName = localStorage.getItem('companyName');
 
 interface AuthState {
   token: string | null;
@@ -31,18 +34,21 @@ export const { setCredentials, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectCurrentAccessToken = (state: any) => state.auth.accessToken;
+export const selectCurrentAccessToken = (state: any) =>
+  state.auth.accessToken || '';
 export const selectCurrentRefreshToken = (state: any) =>
-  state.auth.refreshToken;
+  state.auth.refreshToken || '';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://10.0.0.96:83',
+  baseUrl: 'http://10.0.0.55:84',
   credentials: 'include',
-  prepareHeaders: (headers, { getState }) => {
-    const state = getState() as { auth: AuthState };
-    const token = state.auth.token;
+  prepareHeaders: (headers) => {
+    const token = Cookies.get('accessToken');
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
+    }
+    if (routeName) {
+      headers.set('Route-Name', routeName);
     }
     return headers;
   },

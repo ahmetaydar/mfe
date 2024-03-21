@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 
 const Login = () => {
   const params = useParams();
-  // const path = localStorage.getItem('companyName');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [login] = useLoginMutation();
@@ -16,7 +15,7 @@ const Login = () => {
 
     try {
       const res = await login({
-        userNameOrEmail: 'ahmet.aydar@gcode.com.tr',
+        userNameOrEmail: 'onur', // urldeki parametre eklenecek !!!!
         password: '1234',
       });
 
@@ -37,7 +36,7 @@ const Login = () => {
 
   return (
     <>
-      <div>GCODE LOGIN PAGE</div>;
+      <div>{params.companyName} LOGIN PAGE</div>;
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Kullanıcı Adı" />
         <input type="password" placeholder="Şifre" />

@@ -4,8 +4,10 @@ import { RouterProvider } from 'react-router-dom';
 import { createRouter } from './routing/router-factory';
 import { RoutingStrategy } from './routing/types';
 import './index.css';
-import { store } from 'store/store';
-import { Provider } from 'react-redux';
+import { store as mainStore } from 'store/store';
+import { Provider as MainStoreProvider } from 'react-redux';
+import { store as gcrmStore } from './store';
+import { Provider as GcrmStoreProvider } from 'react-redux';
 
 const mount = ({
   mountPoint,
@@ -19,9 +21,11 @@ const mount = ({
   const router = createRouter({ strategy: routingStrategy, initialPathname });
   const root = createRoot(mountPoint);
   root.render(
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <GcrmStoreProvider store={gcrmStore}>
+      <MainStoreProvider store={mainStore}>
+        <RouterProvider router={router} />
+      </MainStoreProvider>
+    </GcrmStoreProvider>
   );
 
   return () => queueMicrotask(() => root.unmount());
