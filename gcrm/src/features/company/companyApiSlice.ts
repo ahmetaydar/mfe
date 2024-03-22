@@ -1,10 +1,10 @@
-import { apiSlice } from '../api/apiSlice';
+import { gcrmSlice } from '../api/gcrmSlice';
 
-export const companyApiSlice = apiSlice.injectEndpoints({
+export const companyApiSlice = gcrmSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCompanies: builder.query({
       query: () => '/api/customer/getAll',
-      providesTags: ['company'],
+      providesTags: (id) => [{ type: 'company', id }],
     }),
 
     getCompany: builder.query({
@@ -21,6 +21,11 @@ export const companyApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['company'],
     }),
   }),
+  overrideExisting: false,
 });
 
-export const { useGetCompaniesQuery, useGetCompanyQuery } = companyApiSlice;
+export const {
+  useGetCompaniesQuery,
+  useGetCompanyQuery,
+  useAddCompanyMutation,
+} = companyApiSlice;

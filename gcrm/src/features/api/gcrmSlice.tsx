@@ -34,22 +34,23 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
       },
       body: JSON.stringify({ refreshToken: Cookies.get('refreshToken') }),
     });
-    console.log('refreshResult', refreshResult);
 
     if (refreshResult.status === 200 || refreshResult.status === 201) {
-      const { accessToken, refreshToken } = await refreshResult.json();
+      const responseData = await refreshResult.json();
+      const { accessToken, expiryDate, refreshToken } = responseData.token;
       Cookies.set('accessToken', accessToken);
       Cookies.set('refreshToken', refreshToken);
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logOut());
+      window.location.href = `/${routeName}/login`;
     }
   }
 
   return result;
 };
 
-export const apiSlice = createApi({
+export const gcrmSlice = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['company'],
   endpoints: (builder) => ({}),

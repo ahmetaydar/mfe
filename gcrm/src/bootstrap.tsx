@@ -22,9 +22,9 @@ const mount = ({
   const root = createRoot(mountPoint);
   root.render(
     <GcrmStoreProvider store={gcrmStore}>
-      <MainStoreProvider store={mainStore}>
-        <RouterProvider router={router} />
-      </MainStoreProvider>
+      {/* <MainStoreProvider store={mainStore}> */}
+      <RouterProvider router={router} />
+      {/* </MainStoreProvider> */}
     </GcrmStoreProvider>
   );
 

@@ -16,7 +16,6 @@ const GhrLazy = lazy(() => import('../components/Ghr'));
 const RequireAuth = ({ element }: { element: React.ReactNode }) => {
   const location = useLocation();
   const accessToken = Cookies.get('accessToken');
-  console.log('accessToken', accessToken);
 
   if (accessToken === undefined) {
     return <Navigate to="/" state={{ from: location }} replace />;

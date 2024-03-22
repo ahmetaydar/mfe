@@ -1,18 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import {
-  selectCurrentAccessToken,
-  selectCurrentRefreshToken,
-} from 'store/store';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const path = localStorage.getItem('companyName');
-  const token = useSelector(selectCurrentAccessToken);
-  const refreshToken = useSelector(selectCurrentRefreshToken);
-  console.log('gcode token', token);
-  console.log('gcode refreshToken', refreshToken);
+
   const redirectToGcrm = () => {
     navigate(`/${path}/gcrm`, { replace: true });
   };

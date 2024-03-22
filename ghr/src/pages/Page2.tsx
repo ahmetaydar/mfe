@@ -5,7 +5,7 @@ export function Page2() {
   const path = localStorage.getItem('companyName');
 
   const goToDashboardPage = () => {
-    window.location.href = `/${path}`;
+    window.location.href = `/${path}/dashboard`;
   };
 
   return (

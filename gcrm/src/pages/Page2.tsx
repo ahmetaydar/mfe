@@ -7,7 +7,7 @@ export function Page2() {
   return (
     <React.Fragment>
       <div>Page 2 from GCRM</div>
-      <Link to="/page-2">Go to Page 1</Link>
+      <Link to="/page-1">Go to Page 1</Link>
     </React.Fragment>
   );
 }

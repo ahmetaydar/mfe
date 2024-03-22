@@ -1,22 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { useSelector } from 'react-redux';
 import {
-  selectCurrentAccessToken,
-  selectCurrentRefreshToken,
-} from 'store/store';
-import { useGetCompaniesQuery } from '../features/company/companyApiSlice';
+  useAddCompanyMutation,
+  useGetCompaniesQuery,
+} from '../features/company/companyApiSlice';
 
 export function Page1() {
   const local = localStorage.getItem('companyName');
-  const token = useSelector(selectCurrentAccessToken);
-  const refreshToken = useSelector(selectCurrentRefreshToken);
-  console.log('gcrm token', token);
-  console.log('gcrm refreshToken', refreshToken);
 
-  const { data } = useGetCompaniesQuery(undefined);
-  console.log(data);
+  const {
+    data: companies,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetCompaniesQuery({});
+  const [addCompany] = useAddCompanyMutation();
+
+  console.log(companies, isLoading, isFetching, isError);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (!companies) return <div>No companies</div>;
 
   return (
     <>
@@ -24,13 +27,19 @@ export function Page1() {
       <h1> local hosttan okunan değer : {local}</h1>
       <Link to="/page-2">Go to Page 2</Link>
 
-      {data && (
+      {companies && (
         <div>
-          {data.map((company: any) => (
-            <div key={company.id}>{company.name}</div>
+          {companies.customers.map((company: any) => (
+            <div key={company.id}>{company.title}</div>
           ))}
         </div>
       )}
+
+      <button
+        onClick={() => addCompany({ code: '1234', title: 'aydar company' })}
+      >
+        YENİ FİRMA EKLE
+      </button>
     </>
   );
 }
